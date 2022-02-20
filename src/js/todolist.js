@@ -7,15 +7,25 @@ let todos = [];
 
 const savedTodos = localStorage.getItem(TODO);
 
-const deleteTodo = () => {
-  console.log("delete");
+const setTodos = () => {
+  localStorage.removeItem(TODO);
+  localStorage.setItem(TODO, JSON.stringify(todos));
+};
+
+const deleteTodo = (event) => {
+  const li = event.target.parentElement;
+  li.remove();
+  todos = todos.filter((todo) => todo.id !== parseInt(li.id));
+  setTodos();
 };
 
 const paintTodo = (newTodo) => {
   const li = document.createElement("li");
+  li.id = newTodo.id;
+  console.log(li.id);
   const button = document.createElement("button");
   const span = document.createElement("span");
-  span.innerText = `◽ ${newTodo}`;
+  span.innerText = `◽ ${newTodo.text}`;
   button.innerText = "x";
   button.style.marginLeft = "10px";
   button.addEventListener("click", deleteTodo);
@@ -31,13 +41,14 @@ if (savedTodos) {
 
 const submitTodo = (event) => {
   event.preventDefault();
-  const newTodo = todoInput.value;
+  const newTodo = {
+    text: todoInput.value,
+    id: Date.now(),
+  };
   todos.push(newTodo);
   todoInput.value = "";
-  localStorage.setItem(TODO, JSON.stringify(todos));
+  setTodos();
   paintTodo(newTodo);
 };
 
 todoForm.addEventListener("submit", submitTodo);
-
-//delete 마무리
