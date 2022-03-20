@@ -36,6 +36,7 @@ const paintTodo = (newTodo) => {
 
 if (savedTodos) {
   const parsedTodo = JSON.parse(savedTodos);
+  console.log("parse :", parsedTodo);
   parsedTodo.forEach(paintTodo);
 }
 
